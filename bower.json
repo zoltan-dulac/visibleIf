@@ -1,0 +1,21 @@
+{
+  "name": "visibleIf",
+  "version": "2.1.0",
+  "homepage": "http://www.useragentman.com/blog/2010/06/20/visibleif-html5-custom-data-attributes-with-javascript-make-dynamic-interactive-forms/",
+  "authors": [
+    "Zoltan Hawryluk <zoltan.dulac@gmail.com>"
+  ],
+  "description": "A cross browser form field manager that hides and show form fields depending on the values of other form fields.",
+  "main": "shared/js/visibleIf.js",
+  "keywords": [
+    "visibleIf"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1096,5 +1096,16 @@ var formCache = new function(){
     }
 }
 
-EventHelpers.addPageLoadEvent('visibleIf.init');
+if (window.EventHelpers) {
+   EventHelpers.addPageLoadEvent('visibleIf.init'); 
+} else if (window.jQuery) {
+    EventHelpers = {};
+    EventHelpers.hasPageLoadHappened = function () {return false};
+    EventHelpers.addEvent = function (node, ev, func) {
+        jQuery(node).on(ev, func);
+    }
+   jQuery(document).ready(visibleIf.init);
+   
+}
+
 
