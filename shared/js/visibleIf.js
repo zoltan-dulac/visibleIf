@@ -265,7 +265,7 @@ var visibleIf = new function(){
         
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
-            if (!isVisible(field) && !CSSHelpers.isMemberOfClass(field, 'visibleIf-submitIfInvisible')) {
+            if (!isTypeHidden(field) && !isVisible(field) && !CSSHelpers.isMemberOfClass(field, 'visibleIf-submitIfInvisible')) {
                 CSSHelpers.addClass(field, 'visibleIf-notSubmitted');
                 me.changeFormElementDisabled(field, true);
             } else {
@@ -285,6 +285,12 @@ var visibleIf = new function(){
         
         updateVisibilityProperties(this);
     }
+    
+    
+    function isTypeHidden(node){
+        return node.type === 'hidden';
+    }
+    
     
     function isVisible(node){
         return node.offsetWidth != 0;
