@@ -67,6 +67,13 @@ var visibleIf = new function(){
         //strutsHelpers.populateDynamicFormElements();
     }
     
+    me.changeFormElementDisabled = function(field, status){
+        field.disabled = status;
+    }
+    
+    me.nodeDisabledPostHook = function(node){
+    }
+    
     function removeDisabledNodes(){
     
         for (var i = 0; i < visibleIfNodes.length; i++) {
@@ -76,9 +83,11 @@ var visibleIf = new function(){
             
             for (var j = 0; j < els.length; j++) {
                 var el = els[j];
-                el.disabled = false;
+                me.changeFormElementDisabled(el, false);
                 
             }
+            
+            me.nodeDisabledPostHook(node);
         }
     }
     
@@ -128,11 +137,11 @@ var visibleIf = new function(){
             }
         }
         
-		var formNodes = document.getElementsByTagName('form');
-		
-		for (var i=0; i<formNodes.length; i++) {
-			updateVisibilityProperties(formNodes[i]);
-		}
+        var formNodes = document.getElementsByTagName('form');
+        
+        for (var i=0; i<formNodes.length; i++) {
+            updateVisibilityProperties(formNodes[i]);
+        }
     }
     
     function setMandatoryStates(e){
@@ -182,10 +191,10 @@ var visibleIf = new function(){
             var nodes = nodesToIndex[n];
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
-				var parentForm = DOMHelpers.getAncestorByTagName(node, 'form');
-				
-				
-				
+                var parentForm = DOMHelpers.getAncestorByTagName(node, 'form');
+                
+                
+                
                 var rule;
                 var ruleType;
                 if (n == 0) {
@@ -208,11 +217,11 @@ var visibleIf = new function(){
                     for (var j = 0; j < inputVars.length; j++) {
                         var inputVar = inputVars[j];
                         if (!nodesWithEventsAttached[parentForm.id]|| !nodesWithEventsAttached[parentForm.id][inputVar]) {
-							
-							if (!nodesWithEventsAttached[parentForm.id]) {
-								nodesWithEventsAttached[parentForm.id] = new Array();
-							}
-							
+                            
+                            if (!nodesWithEventsAttached[parentForm.id]) {
+                                nodesWithEventsAttached[parentForm.id] = new Array();
+                            }
+                            
                             nodesWithEventsAttached[parentForm.id][inputVar] = true;
                             
                             if (inputVars.length > 0) {
@@ -250,22 +259,24 @@ var visibleIf = new function(){
         }
         
     }
-	
-	function updateVisibilityProperties(formNode){
-		var fields = formNode.elements;
-		
-		for (var i = 0; i < fields.length; i++) {
-			var field = fields[i]
-			if (!isVisible(field) && !CSSHelpers.isMemberOfClass(field, 'visibleIf-submitIfInvisible')) {
-				CSSHelpers.addClass(field, 'visibleIf-notSubmitted');
-				field.disabled = true;
-			} else {
-				CSSHelpers.removeClass(field, 'visibleIf-notSubmitted');
-				field.disabled = false;
-			}
-		}
-	}
-	
+    
+    function updateVisibilityProperties(formNode){
+        var fields = formNode.elements;
+        
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            if (!isTypeHidden(field) && !isVisible(field) && !CSSHelpers.isMemberOfClass(field, 'visibleIf-submitIfInvisible')) {
+                CSSHelpers.addClass(field, 'visibleIf-notSubmitted');
+                me.changeFormElementDisabled(field, true);
+            } else {
+                CSSHelpers.removeClass(field, 'visibleIf-notSubmitted');
+                me.changeFormElementDisabled(field, false);
+            }
+        }
+        
+        me.nodeDisabledPostHook(formNode);
+    }
+    
     function formSubmitEvent(e){
     
         if (CSSHelpers.isMemberOfClass(this, 'visibleIf-submitInvisibleData')) {
@@ -274,6 +285,12 @@ var visibleIf = new function(){
         
         updateVisibilityProperties(this);
     }
+    
+    
+    function isTypeHidden(node){
+        return node.type === 'hidden';
+    }
+    
     
     function isVisible(node){
         return node.offsetWidth != 0;
@@ -716,7 +733,7 @@ var visibleIf = new function(){
                 
                 // only add class if the object is not a member of it yet.
                 if (!me.isMemberOfClass(obj, className)) {
-                    obj.className += " " + className;
+                    obj.className += "  " + className;
                 }
             }
             
@@ -1104,8 +1121,8 @@ if (window.EventHelpers) {
     EventHelpers.addEvent = function (node, ev, func) {
         jQuery(node).on(ev, func);
     }
-   jQuery(document).ready(visibleIf.init);
-   
+    
+    jQuery(document).ready(visibleIf.init);
 }
 
 
