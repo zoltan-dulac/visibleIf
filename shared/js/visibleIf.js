@@ -67,8 +67,35 @@ var visibleIf = new function(){
         //strutsHelpers.populateDynamicFormElements();
     }
     
+    me.getFormNodes = function(){
+        var nodesToIndex = [visibleIfNodes, mandatoryNodes];
+        var formNodes = [];
+        
+        for (var n = 0; n < nodesToIndex.length; n++) {
+            var nodes = nodesToIndex[n];
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                formNodes.push(DOMHelpers.getAncestorByTagName(node, 'form'));
+            }                
+        }
+        
+        formNodes = formNodes.filter(function (e, i, arr) {
+            return arr.lastIndexOf(e) === i;
+        });
+        
+        return formNodes;
+    }
+    
     me.changeFormElementDisabled = function(field, status){
         field.disabled = status;
+    }
+    
+    
+    function arrayUnique(a) {
+        return a.reduce(function(p, c) {
+            if (p.indexOf(c) < 0) p.push(c);
+            return p;
+        }, []);
     }
     
     function removeDisabledNodes(){
@@ -125,11 +152,10 @@ var visibleIf = new function(){
             
             for (var i = 0; i < mandatoryNodes.length; i++) {
                 setMandatoryStates(mandatoryNodes[i], options);
-                
             }
         }
         
-        var formNodes = document.getElementsByTagName('form');
+        var formNodes = me.getFormNodes();
         
         for (var i=0; i<formNodes.length; i++) {
             updateVisibilityProperties(formNodes[i]);
@@ -169,7 +195,7 @@ var visibleIf = new function(){
         //mandatoryNodes = CSSHelpers.getElementsByClassName(document, 'mandatoryIf');
         var nodesToIndex = [visibleIfNodes, mandatoryNodes];
         var nameCounter = 0;
-        var forms = document.getElementsByTagName('form');
+        var forms = me.getFormNodes();
         
         for (var i = 0; i < forms.length; i++) {
             EventHelpers.addEvent(forms[i], 'submit', formSubmitEvent);
