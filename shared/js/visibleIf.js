@@ -716,7 +716,7 @@ var visibleIf = new function(){
                 
                 // only add class if the object is not a member of it yet.
                 if (!me.isMemberOfClass(obj, className)) {
-                    obj.className += " " + className;
+                    obj.className += "  " + className;
                 }
             }
             
