@@ -71,23 +71,16 @@ var visibleIf = new function(){
         field.disabled = status;
     }
     
-    me.nodeDisabledPostHook = function(node){
-    }
-    
     function removeDisabledNodes(){
-    
         for (var i = 0; i < visibleIfNodes.length; i++) {
             var node = visibleIfNodes[i];
             
-            var els = getAllFormElementsIn(node)
+            var els = getAllFormElementsIn(node);
             
             for (var j = 0; j < els.length; j++) {
                 var el = els[j];
                 me.changeFormElementDisabled(el, false);
-                
             }
-            
-            me.nodeDisabledPostHook(node);
         }
     }
     
@@ -103,7 +96,6 @@ var visibleIf = new function(){
         qsSb = new StringBuffer();
         for (var i = 0; i < visibleIfNodes.length; i++) {
             setVisibility(visibleIfNodes[i], options);
-            
         }
         
         
@@ -148,7 +140,6 @@ var visibleIf = new function(){
         changedInput = this;
         for (var i = 0; i < mandatoryNodes.length; i++) {
             setMandatoryState(mandatoryNodes[i]);
-            
         }
         
     }
@@ -174,9 +165,8 @@ var visibleIf = new function(){
     }
     
     function setEvents(){
-    
-        visibleIfNodes = CSSHelpers.getElementsByClassName(document, 'visibleIf');
-        mandatoryNodes = CSSHelpers.getElementsByClassName(document, 'mandatoryIf');
+        //visibleIfNodes = CSSHelpers.getElementsByClassName(document, 'visibleIf');
+        //mandatoryNodes = CSSHelpers.getElementsByClassName(document, 'mandatoryIf');
         var nodesToIndex = [visibleIfNodes, mandatoryNodes];
         var nameCounter = 0;
         var forms = document.getElementsByTagName('form');
@@ -273,8 +263,6 @@ var visibleIf = new function(){
                 me.changeFormElementDisabled(field, false);
             }
         }
-        
-        me.nodeDisabledPostHook(formNode);
     }
     
     function formSubmitEvent(e){
@@ -1124,5 +1112,3 @@ if (window.EventHelpers) {
     
     jQuery(document).ready(visibleIf.init);
 }
-
-

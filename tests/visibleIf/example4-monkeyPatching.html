@@ -11,24 +11,9 @@
 		<link rel="stylesheet" href="../../shared/css/visibleIf.css" type="text/css" media="all" />
 		
 		
-		<script type="text/javascript" src="../../shared/js/EventHelpers.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		
 		<script type="text/javascript" src="../../shared/js/visibleIf.js"></script>
-		
-		<script type="text/javascript">
-			var oldChangeFormElementDisabled = visibleIf.changeFormElementDisabled;
-			var oldNodeDisabledPostHook = visibleIf.nodeDisabledPostHook;
-			
-			visibleIf.changeFormElementDisabled = function(field, status) {
-				oldChangeFormElementDisabled(field, status);
-				console.log('changeFormElementDisabled', field);
-			}
-			
-			visibleIf.nodeDisabledPostHook = function(node) {
-				oldNodeDisabledPostHook(node);
-				console.log('nodeDisabledPostHook', node);
-			}
-		</script>
 	</head>
 	<body id="myExample">
 		<div id="exampleIntro">
@@ -38,161 +23,55 @@
 		</div>
 		
 		
-		<form class="visibleIf-disableIfInvisible">
+		<form>
 			<fieldset>
-				<legend>Phone Information</legend>
+				<legend>Information</legend>
 			
-				<p>Please enter in the following information about your phone</p>
+				<p>Please enter in the following information</p>
 				<table class="formTable">
 					<tr>
 						<th>
-							Phone Type :
+							Test :
 						</th>
 						<td>
-							<select name="phoneType">
+							<select name="test">
 								<option value="">Select One ...</option>
-								<option value="iPhone">iPhone</option>
-								<option value="Milestone">Motorola Milestone/Droid</option>
-								<option value="Pre">Palm Pre</option>
-								<option value="Other">Other</option>
+								<option value="choiceA">Choice A</option>
+								<option value="choiceB">Choice B</option>
 							</select>
 						</td>
 					</tr>
-					
-					<tr class="visibleIf" data-visibleif-rule="phoneType=='iPhone'">
-						<th>Browser Type:</th>
-						<td>
-							<select name="iPhoneBrowserType">
-								<option value="">Select One...</option>
-								<option value="Safari">Safari</option>
-								<option value="Opera Mini">Opera Mini</option>
-								<option value="Other">Other</option>
-							</select>
-						</td>
-					</tr>
-					
-					<tr class="visibleIf" data-visibleif-rule="phoneType=='Milestone'">
-						<th>
-							Browser Type :
-						</th>
-						<td>
-							<select name="milestoneBrowserType">
-								<option value="">Select One...</option>
-								<option value="Chrome">Chrome</option>
-								<option value="Opera Mini">Opera Mini</option>
-								<option value="Dolphin">Dolphin</option>
-								<option value="Skyfire">Skyfire</option>
-								<option value="Mozilla Fennec">Fennec</option>
-								<option value="Other">Other</option>
-							</select>
-						</td>
-					</tr>
-					
-					<tr class="visibleIf" data-visibleif-rule="phoneType=='Pre'">
-						<th>
-							Browser Type:
-						</th>
-						<td>
-							Palm Pre Webkit Browser
-							<input type="hidden" name="browserType" value="Pre WebKit Browser" />
-						</td>
-					</tr>
-					
-					<tr class="visibleIf" data-visibleif-rule="iPhoneBrowserType=='Other' || milestoneBrowserType=='Other'">
-						<th>
-							Specify Other Browser Type :
-						</th>
-						<td>
-							<input type="text" name="otherBrowserType" value="" />
-						</td>
-					</tr>
-					
-					
 				</table>
 			</fieldset>
 			
 		
-			<fieldset class="visibleIf" data-visibleif-rule="phoneType!=''">
-				<legend>Plan Information</legend>
+			<fieldset class="visibleIf" data-visibleif-rule="test != ''">
+				<legend>Additional Information</legend>
 				
-				<p>Please enter in the following information about your cellular
-				plan</p>
+				<p>Please enter some additional information</p>
 				
 				<table class="formTable">
 					<tr>
 						<th>
-							Plan Features :
+							Features :
 						</th>
 						
 						<td>
-							<label for="hasVoiceID"><input type="checkbox" id="hasVoiceID" name="hasVoice" value="true" /> Voice</label>
-							<label for="hasDataID"><input type="checkbox"  id="hasDataID" name="hasData" value="true" /> Data</label>
-							<label for-"hasTextID"><input type="checkbox" id="hasTextID" name="hasText" value="true" /> Text</label>
+							<label><input type="checkbox" name="feature1" value="true" /> Feature 1</label>
+							<label><input type="checkbox" name="feature2" value="true" /> Feature 2</label>
+							<label><input type="checkbox" name="feature3" value="true" /> Feature 3</label>
 						</td>
 					</tr>
-					<tr class="visibleIf" data-visibleif-rule="hasData == 'true'">
-						<th>
-							Data Cap (Per Month) :
-						</th>
-						
-						<td>
-							<select name="dataCap">
-								<option value="">Select One ...</option>
-								<option value="1">1 MB</option>
-								<option value="5">5 MB</option>
-								<option value="100">100 MB</option>
-								<option value="500">500 MB</option>
-								<option value="1000">1 GB</option>
-								<option value="infinity">unlimited</option>
-							</select>
-							
-							<div>
-								
-								
-								
-							<div class="visibleIf" 
-							data-visibleif-rule="parseInt(dataCap) <= 5  && !(iPhoneBrowserType=='Opera Mini' || milestoneBrowserType=='Opera Mini' )">
-							You really should be using Opera Mini to compress you data.
-							
-								<span class="visibleIf" data-visibleif-rule="hasText=='true'">You should also consider
-								using SMS for Tweets and Facebook status updates.</span>
-							</div>
-							
-						</td>
-						
-						
-					</tr>
-				</table>
-			</fieldset>
-			
-			<fieldset class="visibleIf" data-visibleif-rule="phoneType!=''">
-				<legend>Apps Used</legend>
-				
-				<p>Check off the applications that you use on your phone.</p>
-				
-				<table class="formTable">
-					<tr class="visibleIf" data-visibleif-rule="hasData=='true'">
-						<th>Apps with Internet Connectivity :</th>
-						<td>
-							<input type='checkbox' name='hasFacebook' value='true' /> Facebook<br />
-							<input type='checkbox' name='hasTwitter' value='true'/> Twitter<br />
-							<input type='checkbox' name='hasGoogleMaps' /> Google Maps<br />
-						</td>
-						
-					</tr>
-					
 					<tr>
-						<th>Apps without Internet Connectivity :</th>
-						<td>
-							<input type='checkbox' name='hasCalandar' value='true' /> Calendar<br />
-							<input type='checkbox' name='hasToDoList' value='true'/> To Do List<br />
-							<input type='checkbox' name='hasNotes' /> Notes
-							
-						</td>
+						<th>
+							Don't change this :
+						</th>
 						
+						<td>
+							<input type="text" name="ignore" value="Should stay disabled" class="ignore" disabled="disabled" />
+						</td>
 					</tr>
 				</table>
-				
 			</fieldset>
 			
 			
@@ -202,5 +81,18 @@
 		</form>
 		
 		
+		<script type="text/javascript">
+			(function($) {
+                var oldChangeFormElementDisabled = visibleIf.changeFormElementDisabled;
+                
+                visibleIf.changeFormElementDisabled = function(field, status) {
+                    var element = $(field);
+            
+                    if (!element.hasClass('ignore')) {
+                        oldChangeFormElementDisabled(field, status);
+                    }
+                }
+            })(jQuery);
+		</script>		
 	</body>
 </html>
