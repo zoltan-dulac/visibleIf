@@ -9,11 +9,6 @@
 		<link rel="stylesheet" href="../../shared/css/useragentmanExample.css" type="text/css" media="all" />
 		
 		<link rel="stylesheet" href="../../shared/css/visibleIf.css" type="text/css" media="all" />
-		
-		
-		<script type="text/javascript" src="../../shared/js/EventHelpers.js"></script>
-		
-		<script type="text/javascript" src="../../shared/js/visibleIf.js"></script>
 	</head>
 	<body id="myExample">
 		<div id="exampleIntro">
@@ -21,8 +16,9 @@
 			member of the <code>visibleIf-submitInvisibleData</code> class, and
 			the second isn't.  Try submitting both forms without filling out
 			any of the fields.  You will notice the first one submits 
-			all the field values, even the hidden ones, while the second doesn't
-			submit the hidden fields.  
+			only the visible fields, while the second submits the visible ones <em>and</em>
+			the address field, no matter if it's visible or not (due to the address field
+			being a member of the <code>visibleIf-submitIfInvisible</code> class).  
 			
 			<a href="http://www.useragentman.com/blog/2010/06/20/visibleif-html5-custom-data-attributes-with-javascript-make-dynamic-interactive-forms/">Back to User Agent Man <code>visibleIf</code> article </a>
 		</div>
@@ -116,5 +112,7 @@
 				<input type="submit" name="Next &gt;" />
 			</div>
 		</form>
+
+		<script type="text/javascript" src="../../shared/js/visibleIf.js"></script>
 	</body>
 </html>
