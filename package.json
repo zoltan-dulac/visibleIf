@@ -1,0 +1,40 @@
+{
+  "name": "visibleif",
+  "version": "1.0.0",
+  "description": "Show and hide form elements and other HTML depending on the values of other form elements.",
+  "main": "dist/visibleIf.module.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "npx babel js/visibleIf.js --out-file dist/visibleIf-es4.js",
+    "build:module": "(cat js/visibleIf.js; echo; echo 'export default visibleIf;') > dist/visibleIf.module.js; npx babel js/visibleIf.module.js --out-file dist/visibleIf-es4.module.js",
+    "build:module:prod": "(cat js/visibleIf.js; echo; echo 'export default visibleIf;') > dist/visibleIf.module.js; BABEL_ENV=production npx babel dist/visibleIf.module.js --out-file dist/visibleIf-es4-min.module.js",
+    "build:prod": "BABEL_ENV=production npx babel js/visibleIf.js --out-file dist/visibleIf-es4-min.js",
+    "build:all": "npm run build; npm run build:prod; npm run build:module:prod",
+    "clean": "rimraf dist/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoltan-dulac/visibleIf.git"
+  },
+  "keywords": [
+    "form",
+    "hide",
+    "show"
+  ],
+  "author": "Zoltan Hawryluk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zoltan-dulac/visibleIf/issues"
+  },
+  "homepage": "https://github.com/zoltan-dulac/visibleIf#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.5",
+    "babel-minify": "^0.2.0",
+    "babel-preset-minify": "^0.5.1",
+    "eslint": "^8.5.0"
+  }
+}
