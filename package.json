@@ -36,5 +36,8 @@
     "babel-minify": "^0.2.0",
     "babel-preset-minify": "^0.5.1",
     "eslint": "^8.5.0"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.16.5"
   }
 }

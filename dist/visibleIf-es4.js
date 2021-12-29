@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * This notice must be untouched at all times.
  * 
