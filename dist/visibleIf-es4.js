@@ -6,11 +6,11 @@
  * visibleIf.js - a cross browser form field manager that hides and shows
  * form fields depending on the values of other form fields.
  *
- * Version 1.0 released Feb 21, 2009
- * Version 2.0 released June 20, 2010.  Features new 
+ * Version 0.2 released Feb 21, 2009
+ * Version 0.2 released June 20, 2010.  Features new 
  *   rules engine originally developed for HTML5Widgets.js and HTML5 custom
  *   data- attribute support.
- * Version 3.0 released July 17, 2018.
+ * Version 0.3 released July 17, 2018.
  *   Remove IE8 support.
  *
  * Written by: Zoltan Hawryluk. 
@@ -22,18 +22,15 @@
  */
 var visibleIf = new function () {
   var me = this;
-  var formInputCache = new Array();
   var changedInput = null;
   var visibleIfNodes;
   var mandatoryNodes;
-  var varRe = /\s([a-zA-Z][a-zA-Z0-9\.]*)\s/g;
+  var varRe = /\s([a-zA-Z][a-zA-Z0-9.]*)\s/g;
   var operatorRe = /\s*(~|!=|==|>={0,1}|<={0,1})\s*/g;
   var leftBkRe = /\(/g;
   var rightBkRe = /\)/g;
-  var reRe = /~ \"([^\"]*)\"/g;
-  var equalsRe = / == /g;
+  var reRe = /~ "([^"]*)"/g;
   var quotedStringRe = /"[^"]*"/g;
-  var quotedStringOneOnlyRe = /"[^"]*"/;
   var placeHolderString = '_pLaCeHoLdEr_';
   var placeHolderRe = new RegExp(placeHolderString);
   var nodesWithEventsAttached = new Array();
@@ -48,7 +45,7 @@ var visibleIf = new function () {
    * setFormElementsInside() since we are setting doClear accordingly.
    */
 
-  me.init = function (reset) {
+  me.init = function () {
     visibleIfNodes = document.getElementsByClassName('visibleIf');
     mandatoryNodes = document.getElementsByClassName('mandatoryIf');
     removeDisabledNodes();
@@ -71,28 +68,26 @@ var visibleIf = new function () {
     }
   }
 
-  function refreshPageEvent(e) {
+  function refreshPageEvent() {
     me.refreshPage();
   }
 
   me.refreshPage = function (options) {
+    var qsSb = new StringBuffer();
     changedInput = this;
     inputsToClear = new Array();
-    qsSb = new StringBuffer();
 
     for (var i = 0; i < visibleIfNodes.length; i++) {
       setVisibility(visibleIfNodes[i], options);
     }
 
     if (!(options && !options.isPageLoaded)) {
-      for (i in inputsToClear) {
-        var el = inputsToClear[i];
-
-        if (i != 0) {
+      for (var _i in inputsToClear) {
+        if (_i != 0) {
           qsSb.append('&');
         }
 
-        qsSb.append(i).append('=');
+        qsSb.append(_i).append('=');
       }
 
       var qs = qsSb.toString();
@@ -105,19 +100,19 @@ var visibleIf = new function () {
         }
       }
 
-      for (var i = 0; i < mandatoryNodes.length; i++) {
-        setMandatoryStates(mandatoryNodes[i], options);
+      for (var _i2 = 0; _i2 < mandatoryNodes.length; _i2++) {
+        setMandatoryStates(mandatoryNodes[_i2], options);
       }
     }
 
     var formNodes = document.getElementsByTagName('form');
 
-    for (var i = 0; i < formNodes.length; i++) {
-      updateVisibilityProperties(formNodes[i]);
+    for (var _i3 = 0; _i3 < formNodes.length; _i3++) {
+      updateVisibilityProperties(formNodes[_i3]);
     }
   };
 
-  function setMandatoryStates(e) {
+  function setMandatoryStates() {
     changedInput = this;
 
     for (var i = 0; i < mandatoryNodes.length; i++) {
@@ -149,7 +144,6 @@ var visibleIf = new function () {
     visibleIfNodes = document.getElementsByClassName('visibleIf');
     mandatoryNodes = document.getElementsByClassName('mandatoryIf');
     var nodesToIndex = [visibleIfNodes, mandatoryNodes];
-    var nameCounter = 0;
     var forms = document.getElementsByTagName('form');
 
     for (var i = 0; i < forms.length; i++) {
@@ -159,8 +153,8 @@ var visibleIf = new function () {
     for (var n = 0; n < nodesToIndex.length; n++) {
       var nodes = nodesToIndex[n];
 
-      for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
+      for (var _i4 = 0; _i4 < nodes.length; _i4++) {
+        var node = nodes[_i4];
         var parentForm = DOMHelpers.getAncestorByTagName(node, 'form');
         var rule;
         var ruleType;
@@ -235,7 +229,7 @@ var visibleIf = new function () {
     }
   }
 
-  function formSubmitEvent(e) {
+  function formSubmitEvent() {
     if (this.classList.contains('visibleIf-submitInvisibleData')) {
       return;
     }
@@ -300,8 +294,7 @@ var visibleIf = new function () {
           throw "Error: the rule " + rule + " is not attached to a form.";
         }
 
-        var stringToEval;
-        var formElem = parentForm[rule.name]; // first, replace all quoted strings with placeholders:
+        var stringToEval; // first, replace all quoted strings with placeholders:
 
         var diddledRule = rule.replace(quotedStringRe, placeHolderString); // next, grab all those quoted strings
 
@@ -394,18 +387,19 @@ var visibleIf = new function () {
               default:
                 if (doClear) {
                   /*
-                  * The following code is for use with a seperate
-                  * JavaScript library, fileChanger.js.  If
-                  * it's a fileChanger widget, we need to do an Ajax call
-                  */
+                   * The following code is for use with a seperate
+                   * JavaScript library, fileChanger.js.  If
+                   * it's a fileChanger widget, we need to do an Ajax call
+                   */
                   if (elClassList.contains('fileList_fileDisplay')) {
                     elClassList.remove('fileList_fileDisplay');
                     el.disabled = false;
                     el.name = el.name.replace("_ignore", "");
                     var html = el.outerHTML.replace(/text/, 'file');
                     el.parentNode.innerHTML = html; // insert ajax call to delete file here.
+                    // eslint-disable-next-line no-undef
 
-                    url = config.getScriptedValue('visibleIf.urls.deleteFiles', {
+                    var url = config.getScriptedValue('visibleIf.urls.deleteFiles', {
                       files: StringHelpers.urlencode(el.value),
                       formProperty: el.name
                     });
@@ -475,16 +469,20 @@ var visibleIf = new function () {
       inputsToClear[el.name] = el;
     }
   }
+  /* This requires helpers.js */
+
 
   function deleteRequestHandler() {
     if (!req) {
       return;
     } // only if req shows "complete"
+    // eslint-disable-next-line no-undef
 
 
     if (req.readyState == ReadyState.COMPLETED) {
       // only if "OK"
       //DebugHelpers.log(req.getAllResponseHeaders());
+      // eslint-disable-next-line no-undef
       if (req.status == HttpCode.OK || req.status == HttpCode.LOCAL_OK) {// whatever
         //jslog.debug('Deleted Successfully')
       } else {
@@ -508,51 +506,6 @@ var visibleIf = new function () {
     return vars;
   }
 
-  function getFieldValue(formElementNode) {
-    var r = "";
-    var type;
-    type = formElementNode.type;
-
-    if (!type) {
-      if (formElementNode.length) type = formElementNode[0].type;
-    }
-
-    switch (type) {
-      case 'text':
-      case 'hidden':
-      case 'password':
-      case 'textarea':
-      case 'select-one':
-        r = formElementNode.value;
-
-      case 'checkbox':
-        if (formElementNode.checked) {
-          r = formElementNode.value;
-        }
-
-        break;
-
-      case 'radio':
-        for (var i = 0; i < formElementNode.length; i++) {
-          if (formElementNode[i].checked) {
-            r = formElementNode[i].value;
-            break;
-          }
-        }
-
-    }
-
-    if (formElementNode.length) {
-      for (var i = 0; i < formElementNode.length; i++) {
-        if (formElementNode[i].checked) {
-          r = formElementNode[i].value;
-        }
-      }
-    }
-
-    return r.replace('\n', '').replace('   ', '');
-  }
-
   function getAllFormElementsIn(node) {
     if (!node) {
       node = document;
@@ -568,7 +521,7 @@ var visibleIf = new function () {
     for (var i in elems) {
       var elem = elems[i];
 
-      for (j = 0; j < elem.length; j++) {
+      for (var j = 0; j < elem.length; j++) {
         r.push(elem[j]);
       }
     }
