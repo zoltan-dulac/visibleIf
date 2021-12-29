@@ -1,6 +1,6 @@
 {
   "name": "visibleif",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Show and hide form elements and other HTML depending on the values of other form elements.",
   "main": "dist/visibleIf.module.js",
   "directories": {
